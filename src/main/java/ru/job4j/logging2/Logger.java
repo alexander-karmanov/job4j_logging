@@ -1,4 +1,4 @@
-package main.java.ru.job4j.logging;
+package ru.job4j.logging2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ public class Logger {
         this.level = level;
     }
 
-    public String getConfig() {
+    public Properties getConfig() {
         var properties = new Properties();
         try (InputStream input = Logger.class.getClassLoader()
                 .getResourceAsStream("app.properties")) {
@@ -22,12 +22,16 @@ public class Logger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return properties.getProperty("appender");
+        return properties;
     }
 
     public boolean log(LogLevel level, String message) {
-        /* Реализация логгирования */
-        appender = new ConsoleAppender();
+        if (getConfig().getProperty("appender").contains("ConsoleAppender")) {
+             appender = new ConsoleAppender();
+        }
+        if (getConfig().getProperty("appender").contains("FileAppender")) {
+             appender = new FileAppender("logs.txt");
+        }
         appender.append(message);
         return true;
     }
@@ -50,5 +54,10 @@ public class Logger {
     public boolean error(String message) {
         log(LogLevel.ERROR, message);
         return true;
+    }
+
+    public static void main(String[] args) {
+        Logger logger = new Logger("TestLogger", LogLevel.DEBUG);
+        logger.log(LogLevel.DEBUG, "This is a debug message");
     }
 }

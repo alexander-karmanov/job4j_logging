@@ -1,4 +1,4 @@
-package main.java.ru.job4j.logging;
+package ru.job4j.logging2;
 
 public enum LogLevel {
     DEBUG,

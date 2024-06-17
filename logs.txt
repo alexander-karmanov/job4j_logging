@@ -1,1 +1,1 @@
-Message 2
+This is an info message

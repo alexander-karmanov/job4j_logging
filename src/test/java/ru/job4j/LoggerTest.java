@@ -1,7 +1,7 @@
-package test.java.ru.job4j;
+package ru.job4j;
 
-import main.java.ru.job4j.logging.LogLevel;
-import main.java.ru.job4j.logging.Logger;
+import ru.job4j.logging2.LogLevel;
+import ru.job4j.logging2.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,25 +17,25 @@ public class LoggerTest {
 
     @Test
     public void testDebugLogging() {
-        /* Тестирование debug логирования */
+        /* testing debug logging */
         assertTrue(logger.debug("This is a debug message"));
     }
 
     @Test
     public void testInfoLogging() {
-        /* Тестирование info логирования */
+        /* testing info logging */
         assertTrue(logger.info("This is an info message"));
     }
 
     @Test
     public void testWarnLogging() {
-        /* Тестирование warn логирования  */
+        /* testing warn logging */
         assertTrue(logger.warn("This is a warn message"));
     }
 
     @Test
     public void testErrorLogging() {
-        /* Тестирование error логирования */
+        /* testing error logging */
         assertTrue(logger.error("This is an error message"));
     }
 }
