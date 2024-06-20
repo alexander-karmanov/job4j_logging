@@ -11,8 +11,6 @@ public class Logger {
     private LogLevel level;
     private Appender appender;
 
-    private List<Appender> appenders;
-
     public Logger(String name, LogLevel level) {
         this.name = name;
         this.level = level;
@@ -29,26 +27,18 @@ public class Logger {
         return properties;
     }
 
-    public boolean getAppender() {
-        String[] array = getConfig().getProperty("appenders").split(",");
-        List<String> list = Arrays.asList(array);
-
-        for (String st : list) {
-            appenders.add(appender);
-        }
-        return true;
-    }
-
     public boolean log(LogLevel level, String message) {
-
-        /*if (getConfig().getProperty("appenders").contains("ConsoleAppender")) {
-             appender = new ConsoleAppender();
+        String[] array = getConfig().getProperty("appenders").split(",");
+        for (var el : array) {
+            if (el.equals("ConsoleAppender")) {
+                appender = new ConsoleAppender();
+                appender.append(message);
+            }
+            if (el.equals("FileAppender")) {
+                appender = new FileAppender(getConfig().getProperty("file"));
+                appender.append(message);
+            }
         }
-        if (getConfig().getProperty("appenders").contains("FileAppender")) {
-             appender = new FileAppender("logs.txt");
-        } */
-
-        appender.append(message);
         return true;
     }
 
@@ -70,5 +60,10 @@ public class Logger {
     public boolean error(String message) {
         log(LogLevel.ERROR, message);
         return true;
+    }
+
+    public static void main(String[] args) {
+        Logger logger = new Logger("TestLogger", LogLevel.DEBUG);
+        logger.log(LogLevel.DEBUG, "This is a debug message 1");
     }
 }
