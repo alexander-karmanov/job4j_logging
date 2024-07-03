@@ -1,43 +1,27 @@
 package ru.job4j.logging2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class Logger {
     private String name;
     private LogLevel level;
-    private Appender appender;
+    private List<Appender> appenders = new ArrayList<>();
+
+    public Logger() {
+    }
 
     public Logger(String name, LogLevel level) {
         this.name = name;
         this.level = level;
     }
 
-    public Properties getConfig() {
-        var properties = new Properties();
-        try (InputStream input = Logger.class.getClassLoader()
-                .getResourceAsStream("app.properties")) {
-            properties.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return properties;
+    public void addAppender(Appender appender) {
+        appenders.add(appender);
     }
 
     public boolean log(LogLevel level, String message) {
-        String[] array = getConfig().getProperty("appenders").split(",");
-        for (var el : array) {
-            if (el.equals("ConsoleAppender")) {
-                appender = new ConsoleAppender();
-                appender.append(message);
-            }
-            if (el.equals("FileAppender")) {
-                appender = new FileAppender(getConfig().getProperty("file"));
-                appender.append(message);
-            }
+        for (Appender el: appenders) {
+            el.append(message);
         }
         return true;
     }
@@ -60,10 +44,5 @@ public class Logger {
     public boolean error(String message) {
         log(LogLevel.ERROR, message);
         return true;
-    }
-
-    public static void main(String[] args) {
-        Logger logger = new Logger("TestLogger", LogLevel.DEBUG);
-        logger.log(LogLevel.DEBUG, "This is a debug message 1");
     }
 }
